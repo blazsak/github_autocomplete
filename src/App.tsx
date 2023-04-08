@@ -1,36 +1,23 @@
-import React, { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '../../../../../vite.svg'
-import './App.css'
+import React from 'react'
 
 function App (): JSX.Element {
-    const [count, setCount] = useState(0)
-
     return (
-        <div className="App">
-            <div>
-                <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-                    <img src={viteLogo} className="logo" alt="Vite logo"/>
-                </a>
-                <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-                    <img src={reactLogo} className="logo react" alt="React logo"/>
-                </a>
+        <main className="grid min-h-full bg-white px-6 py-4 lg:px-8">
+            <div className="text-center">
+                { [...Array(20).keys()].map((i: number) =>
+                    (
+                        <p key={i} className="mt-6 text-base leading-7 text-gray-600">
+                            Default page
+                        </p>
+                    )
+                )}
+
             </div>
-            <h1>Makersden challange</h1>
-            <div className="card">
-                <button onClick={() => {
-                    setCount((count) => count + 1)
-                }}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </div>
+
+            <footer className="fixed bottom-4 right-4 text-xs text-slate-400">
+                &copy; { new Date().getFullYear() }
+            </footer>
+        </main>
     )
 }
 
