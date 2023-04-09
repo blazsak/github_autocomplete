@@ -4,8 +4,9 @@ export const ListItem = styled.li`
     display: block;
     padding: 1rem;
     position: relative;
-    border: 1px solid #dadada;
+    border: 1px solid #aaa;
     margin-left: 25px;
+    background: #fff;
 
     > span {
         position: absolute;
@@ -24,8 +25,8 @@ export const ListItem = styled.li`
         height: calc(100% + 2px);
         left: -15px;
         top: -50%;
-        border-left: 1px dotted #dadada;
-        border-bottom: 1px dotted #dadada;
+        border-left: 1px dotted #ccc;
+        border-bottom: 1px dotted #ccc;
     }
 
     + li {

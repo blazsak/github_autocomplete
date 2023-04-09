@@ -43,10 +43,15 @@ export const InputIcon = styled.div`
                   left: 10px;
               `}
 
-    svg {
+    svg, button {
         color: #999;
         width: 20px;
         height: 20px;
+    }
+    button {
+        border: 0;
+        background: 0;
+        box-shadow: none;
     }
 `;
 export const InputLabel = styled.div`

@@ -16,8 +16,12 @@ export default function GithubAutocomplete({
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
     const [items, setItems] = useState<GithubAutocompleteListItemType[]>([]);
+    const itemsToShow = useMemo(
+        () => items.sort((a, b) => a.name.localeCompare(b.name)).slice(0, 50),
+        [items],
+    );
     const isListActive = useMemo(() => search.length >= 3, [search]);
-
+    const hasError = false;
     // Handle debounced input
     useEffect(() => {
         console.log('handle Input', { search });
@@ -30,9 +34,9 @@ export default function GithubAutocomplete({
         fetchCallbackDebounceTimeout = setTimeout(() => {
             console.log('fetch from API', { search });
             setItems(
-                [...Array(Math.floor(Math.random() * 20)).keys()].map((i) => ({
+                [...Array(Math.floor(Math.random() * 500)).keys()].map((i) => ({
                     id: i + 1,
-                    name: `Item number ${i + 1}`,
+                    name: (Math.random() + 1).toString(36).substring(2, 7),
                 })),
             );
             setIsLoading(false);
@@ -50,7 +54,25 @@ export default function GithubAutocomplete({
                 placeholder={placeholder}
                 onChange={handleInputChange}
             />
-            <GithubAutocompleteList isActive={isListActive} items={items} />
+            <GithubAutocompleteList
+                isActive={isListActive}
+                items={items.slice(0, 50)}
+                hasError={hasError}
+            >
+                {hasError ? (
+                    'Error'
+                ) : (
+                    <>
+                        {isLoading && `Fetching data...`}
+                        {!isLoading &&
+                            (items.length === 0
+                                ? `No records were found`
+                                : `Shows ${itemsToShow.length}
+                                   item${itemsToShow.length === 1 ? 's' : ''}
+                                   out of ${items.length} found`)}
+                    </>
+                )}
+            </GithubAutocompleteList>
         </GithubAutocompleteWrapper>
     );
 }
