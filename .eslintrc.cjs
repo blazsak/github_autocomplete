@@ -6,7 +6,8 @@ module.exports = {
     },
     extends: [
         'plugin:react/recommended',
-        'standard-with-typescript'
+        'standard-with-typescript',
+        'plugin:prettier/recommended'
     ],
     overrides: [],
     parserOptions: {
@@ -16,12 +17,15 @@ module.exports = {
     },
     plugins: [
         'react',
-        '@typescript-eslint'
+        '@typescript-eslint',
+        'prettier'
     ],
     rules: {
         // 'react/react-in-jsx-scope': 'off',
+        indent: ['error', 4],
         '@typescript-eslint/indent': ['error', 4],
-        "react/prop-types": "off",
-        indent: ['error', 4]
+        '@typescript-eslint/consistent-type-definitions': 'off',
+        'react/prop-types': 'off',
+        'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     }
 }
