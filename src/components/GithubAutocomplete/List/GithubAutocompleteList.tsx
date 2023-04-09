@@ -1,16 +1,24 @@
 import React from 'react';
 import GithubAutocompleteListItem from './GithubAutocompleteListItem';
 import styled from 'styled-components';
+import { type GithubAutocompleteListItemType } from '../@types/GithubAutocompleteListItemType';
+import { type ListPropsType } from '../@types/ListPropsType';
 
 export default function GithubAutocompleteList({
-    number = 2,
+    items,
+    isActive,
 }: {
-    number: number;
+    items: GithubAutocompleteListItemType[];
+    isActive: boolean;
 }): JSX.Element {
     return (
-        <List>
-            {[...Array(number).keys()].map((i: number) => (
-                <GithubAutocompleteListItem key={i} number={i + 1} />
+        <List isActive={true}>
+            {items.map((item: GithubAutocompleteListItemType, index: number) => (
+                <GithubAutocompleteListItem
+                    key={item.id}
+                    item={item}
+                    number={index + 1}
+                />
             ))}
         </List>
     );
@@ -19,11 +27,19 @@ export default function GithubAutocompleteList({
 const List = styled.ul`
     display: block;
     background: #fff;
-    margin-top: 2px;
-    border: 1px solid #dadada;
+    z-index: 2;
     max-height: 380px;
     overflow: hidden;
     overflow-y: scroll;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: -1px;
+
+    transition: 0.4s height;
+
+    //opacity: ${({ isActive }: ListPropsType) => (isActive ? 1 : 0)};
 
     scrollbar-width: thin;
 

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { GithubAutocompleteStyle } from './GithubAutocompleteStyle';
+import React, { useMemo, useState } from 'react';
+import { GithubAutocompleteStyles } from './GithubAutocompleteStyles';
 import GithubAutocompleteInput from './Input/GithubAutocompleteInput';
 import GithubAutocompleteList from './List/GithubAutocompleteList';
+import { type GithubAutocompleteListItemType } from './@types/GithubAutocompleteListItemType';
+import { clearTimeout } from 'timers';
 
 export default function GithubAutocomplete({
     label,
@@ -11,52 +13,55 @@ export default function GithubAutocomplete({
     placeholder?: string;
 }): JSX.Element {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [number, setNumber] = useState<number>(4);
+    const [search, setSearch] = useState<string>('');
+    const [items, setItems] = useState<GithubAutocompleteListItemType[]>([]);
+    let callbackDebounceTimeout: NodeJS.Timeout;
 
-    function onClick(): void {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-            setNumber(number + 1);
-        }, 2000);
-    }
+    const isListActive = useMemo(() => search.length >= 3, [search]);
 
     function handleInputChange(value: string): void {
-        console.log(value);
-
-        const searchValue = value.trim();
-        if (searchValue.length > 3) {
-            console.log('init search');
-            onClick();
+        setSearch(value.trim());
+        console.log('clear timeout', callbackThrottleTimeout);
+        clearTimeout(callbackThrottleTimeout);
+        if (!isListActive) {
+            setItems([]);
+            return;
         }
+        callbackThrottleTimeout = setTimeout(fetchApiResults, 1500);
+        console.log('set timeout', callbackThrottleTimeout);
+    }
+
+    function debounce(callback: () => void, delay: number = 500): void {
+        let timeout;
+
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                callback(...args);
+            }, delay);
+        };
+    }
+
+    function fetchApiResults(): void {
+        setIsLoading(true);
+        console.log('fetch from API', callbackThrottleTimeout);
+        setItems(
+            [...Array(Math.floor(Math.random() * 20)).keys()].map((i) => ({
+                id: i + 1,
+                name: `Item number ${i + 1}`,
+            })),
+        );
     }
 
     return (
-        <GithubAutocompleteStyle>
+        <GithubAutocompleteStyles>
             <GithubAutocompleteInput
                 loading={isLoading}
                 label={label}
                 placeholder={placeholder}
                 onChange={handleInputChange}
             />
-            <GithubAutocompleteList number={number} />
-            <button onClick={onClick} disabled={isLoading}>
-                set Loading
-            </button>
-            <button
-                onClick={() => {
-                    setNumber(number + 1);
-                }}
-            >
-                +
-            </button>
-            <button
-                onClick={() => {
-                    setNumber(number - 1);
-                }}
-            >
-                -
-            </button>
-        </GithubAutocompleteStyle>
+            <GithubAutocompleteList isActive={isListActive} items={items} />
+        </GithubAutocompleteStyles>
     );
 }

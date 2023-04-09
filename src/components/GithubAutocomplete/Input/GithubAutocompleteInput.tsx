@@ -1,6 +1,6 @@
 import React from 'react';
 import GithubAutocompleteIconSearch from '../Icon/GithubAutocompleteIconSearch';
-import { InputWrapper, Input, InputIcon, InputLabel } from '../GithubAutocompleteStyle';
+import { InputWrapper, Input, InputIcon, InputLabel } from '../GithubAutocompleteStyles';
 import GithubAutocompleteIconSpinner from '../Icon/GithubAutocompleteIconSpinner';
 
 export default function GithubAutocompleteInput({
