@@ -11,11 +11,13 @@ export default function GithubAutocomplete({
     placeholder?: string;
 }): JSX.Element {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [number, setNumber] = useState<number>(4);
 
     function onClick(): void {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
+            setNumber(number + 1);
         }, 2000);
     }
 
@@ -37,9 +39,23 @@ export default function GithubAutocomplete({
                 placeholder={placeholder}
                 onChange={handleInputChange}
             />
-            <GithubAutocompleteList />
+            <GithubAutocompleteList number={number} />
             <button onClick={onClick} disabled={isLoading}>
-                Loading
+                set Loading
+            </button>
+            <button
+                onClick={() => {
+                    setNumber(number + 1);
+                }}
+            >
+                +
+            </button>
+            <button
+                onClick={() => {
+                    setNumber(number - 1);
+                }}
+            >
+                -
             </button>
         </GithubAutocompleteStyle>
     );
