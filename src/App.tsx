@@ -1,5 +1,5 @@
 import React from 'react';
-import GithubAutocomplete from './components/GithubAutocomplete/GithubAutocomplete';
+import GithubAutocomplete from './components/GithubAutocomplete';
 
 function App(): JSX.Element {
     return (

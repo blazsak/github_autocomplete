@@ -1,14 +1,6 @@
 import styled, { css } from 'styled-components';
 import { type InputIconPropsType } from './@types/InputIconPropsType';
 
-export const GithubAutocompleteStyles = styled.div`
-    width: calc(100% - 20px);
-    max-width: 340px;
-    margin: 0 auto;
-    text-align: left;
-    position: relative;
-`;
-
 export const Input = styled.input`
     background: #fff;
     border: 1px solid #bbb;

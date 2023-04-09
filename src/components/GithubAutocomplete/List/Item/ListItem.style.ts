@@ -1,23 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
-import { type GithubAutocompleteListItemType } from '../@types/GithubAutocompleteListItemType';
 
-export default function GithubAutocompleteListItem({
-    item,
-    number = 0,
-}: {
-    item: GithubAutocompleteListItemType;
-    number: number;
-}): JSX.Element {
-    return (
-        <ListItem>
-            <span>#{number}</span>
-            {item.name}
-        </ListItem>
-    );
-}
-
-const ListItem = styled.li`
+export const ListItem = styled.li`
     display: block;
     padding: 1rem;
     position: relative;
