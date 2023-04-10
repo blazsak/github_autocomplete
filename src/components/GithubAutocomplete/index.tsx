@@ -47,7 +47,7 @@ export default function GithubAutocomplete({
                             (itemsToShow.length === 0
                                 ? `No records were found`
                                 : `Shows ${itemsToShow.length}
-                                   item${itemsToShow.length === 1 ? 's' : ''}
+                                   item${itemsToShow.length !== 1 ? 's' : ''}
                                    out of ${total} found`)}
                     </>
                 )}
