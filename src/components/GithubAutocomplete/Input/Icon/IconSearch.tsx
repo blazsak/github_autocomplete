@@ -1,5 +1,5 @@
 import React from 'react';
-export default function GithubAutocompleteIconSearch({ ...otherProps }): JSX.Element {
+export function IconSearch({ ...otherProps }): JSX.Element {
     return (
         <svg
             aria-hidden="true"

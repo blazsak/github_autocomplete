@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-export default function GithubAutocompleteIconSpinner({ ...otherProps }): JSX.Element {
+export function IconSpinner({ ...otherProps }): JSX.Element {
     return (
         <SvgSpinner viewBox="0 0 50 50" {...otherProps}>
             <circle cx="25" cy="25" r="20" fill="none" strokeWidth="5" />

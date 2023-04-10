@@ -1,16 +1,9 @@
 import styled, { css } from 'styled-components';
 import { type InputIconPropsType } from './@types/InputIconPropsType';
 
-export const GithubAutocompleteStyle = styled.div`
-    width: calc(100% - 20px);
-    max-width: 340px;
-    margin: 0 auto;
-    text-align: left;
-`;
-
 export const Input = styled.input`
     background: #fff;
-    border: 1px solid #dedede;
+    border: 1px solid #bbb;
     line-height: 1.1;
     outline: none;
     width: 100%;
@@ -50,10 +43,15 @@ export const InputIcon = styled.div`
                   left: 10px;
               `}
 
-    svg {
+    svg, button {
         color: #999;
         width: 20px;
         height: 20px;
+    }
+    button {
+        border: 0;
+        background: 0;
+        box-shadow: none;
     }
 `;
 export const InputLabel = styled.div`
@@ -63,4 +61,5 @@ export const InputLabel = styled.div`
 `;
 export const InputWrapper = styled.div`
     position: relative;
+    z-index: 5;
 `;
