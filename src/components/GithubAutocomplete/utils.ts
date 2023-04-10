@@ -1,4 +1,3 @@
-import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { type ListItemType } from './List/Item/@types/ListItemType';
 import {
@@ -8,16 +7,18 @@ import {
 
 // TODO refactor to useCallback debounce function
 let fetchCallbackDebounceTimeout: NodeJS.Timeout;
+let abortController: AbortController;
 
 declare type GithubAutocompleteHookType = {
     isLoading: boolean;
     isListActive: boolean;
-
-    setSearch: React.Dispatch<string>;
     itemsToShow: ListItemType[];
     total: number;
     hasError: boolean;
     error: string;
+    selectedItem?: ListItemType;
+    handleKeyboard: (key: string) => void;
+    handleInputChange: (value: string) => void;
 };
 export function useGithubAutocomplete(): GithubAutocompleteHookType {
     const { searchRepositories, searchUsers } = useGithubApiSearch();
@@ -27,6 +28,8 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
     const [total, setTotal] = useState<number>(0);
     const [items, setItems] = useState<ListItemType[]>([]);
     const [error, setError] = useState<string>('');
+    const [cursor, setCursor] = useState<number>(-1);
+
     const itemsToShow = useMemo<ListItemType[]>(
         () =>
             items
@@ -39,8 +42,18 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
         [items],
     );
     const isListActive = useMemo<boolean>(() => search.length >= 3, [search]);
-
     const hasError = useMemo<boolean>(() => error !== '', [error]);
+
+    // handle keyboard
+    const [selectedItem, setSelectedItem] = useState<ListItemType | undefined>(undefined);
+    useEffect(() => {
+        if (isLoading) {
+            setCursor(-1);
+            return;
+        }
+        setSelectedItem(itemsToShow[cursor]);
+    }, [cursor, itemsToShow, isLoading]);
+
     // Handle debounced input
     useEffect(() => {
         if (!isListActive) {
@@ -49,6 +62,8 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
         }
         setIsLoading(true);
         setError('');
+        abortController?.abort();
+        abortController = new AbortController();
         clearTimeout(fetchCallbackDebounceTimeout);
         fetchCallbackDebounceTimeout = setTimeout(() => {
             Promise.all([searchRepositories(search), searchUsers(search)])
@@ -73,12 +88,13 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
                             name: u.login,
                             avatar: u.avatar_url !== '' ? `${u.avatar_url}&size=60` : '',
                             description: '',
-                            url: '',
+                            url: u.html_url,
                             type: 'user',
                         })),
                     ];
                     setTotal(repositories.total_count + users.total_count);
                     setItems(mappedItems);
+                    setError('');
                 })
                 .catch((reason) => {
                     setError(
@@ -106,18 +122,41 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
                 })),
             );
             setIsLoading(false);
-            */
+            /**/
         }, 1000);
     }, [search]);
+
+    function handleInputChange(value: string): void {
+        setSearch(value.trim());
+    }
+    function handleKeyboard(key: string): void {
+        if (key === 'ArrowUp' && cursor > 0) {
+            setCursor(cursor - 1);
+        }
+        if (key === 'ArrowDown' && cursor < itemsToShow.length - 1) {
+            setCursor(cursor + 1);
+        }
+        if (key === 'Home') {
+            setCursor(0);
+        }
+        if (key === 'End') {
+            setCursor(itemsToShow.length - 1);
+        }
+        if (key === 'Enter' && selectedItem !== undefined) {
+            window?.open(selectedItem.url, '_blank');
+        }
+    }
 
     return {
         isLoading,
         isListActive,
-        setSearch,
         itemsToShow,
         total,
         hasError,
         error,
+        selectedItem,
+        handleKeyboard,
+        handleInputChange,
     };
 }
 
@@ -154,6 +193,7 @@ export function useGithubApiSearch(): GitHubApiSearchType {
             const encodedSearch = encodeURIComponent(search);
             return await fetch(
                 `${apiUrl}/search/repositories?q=${encodedSearch} in:public in:name&per_page=100&page=1`,
+                { signal: abortController.signal },
             ).then(async (response) => {
                 return (await handleResponse(
                     response,
@@ -169,6 +209,7 @@ export function useGithubApiSearch(): GitHubApiSearchType {
             const encodedSearch = encodeURIComponent(search);
             return await fetch(
                 `${apiUrl}/search/users?q=${encodedSearch} in:login&per_page=100&page=1`,
+                { signal: abortController.signal },
             ).then(async (response) => {
                 return (await handleResponse(
                     response,

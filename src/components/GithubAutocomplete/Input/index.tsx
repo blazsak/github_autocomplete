@@ -7,11 +7,13 @@ export function GithubAutocompleteInput({
     label,
     placeholder,
     onChange = () => {},
+    onKey = () => {},
 }: {
     loading: boolean;
     label?: string;
     placeholder?: string;
     onChange?: (value: string) => void;
+    onKey?: (value: string) => void;
 }): JSX.Element {
     const [currentValue, setCurrentValue] = useState<string>('');
 
@@ -33,6 +35,9 @@ export function GithubAutocompleteInput({
                         onChange(event.currentTarget.value);
                     }}
                     value={currentValue}
+                    onKeyUp={(event) => {
+                        onKey(event.key);
+                    }}
                 />
                 <InputIcon right active={loading}>
                     <IconSpinner />

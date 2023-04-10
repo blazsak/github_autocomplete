@@ -1,16 +1,30 @@
 import styled from 'styled-components';
 
 export const ListItem = styled.li`
-    display: flex;
-    align-items: center;
     padding: 0.25rem;
     position: relative;
     border: 1px solid #aaa;
     margin-left: 25px;
-    gap: 15px;
+    z-index: 1;
     background: #fff;
 
-    > small {
+    &:hover,
+    &.selected {
+        background-color: #475569;
+        color: white;
+        border-color: #475569;
+        z-index: 2;
+        small {
+            background-color: #273549;
+        }
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    small {
         position: absolute;
         top: 0;
         right: 0;
@@ -49,7 +63,7 @@ export const ListItem = styled.li`
         display: inline-block;
         position: absolute;
         bottom: 1px;
-        left: 1px;
+        left: 2px;
         background-color: #475569;
         font-size: 8px;
         letter-spacing: 1px;
@@ -66,7 +80,7 @@ export const ListItem = styled.li`
     ::before {
         position: absolute;
         content: '';
-        width: 15px;
+        width: 13px;
         height: calc(100% + 2px);
         left: -15px;
         top: -50%;

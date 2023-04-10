@@ -11,6 +11,7 @@ export interface SimplifiedGitHubApiUserInterface {
     login: string;
     id: number;
     avatar_url: string;
+    html_url: string;
 }
 export interface SimplifiedGitHubApiRepositoryInterface {
     id: number;
@@ -19,9 +20,5 @@ export interface SimplifiedGitHubApiRepositoryInterface {
     description: string;
     language: string;
     stargazers_count: number;
-    owner: {
-        login: string;
-        id: number;
-        avatar_url: string;
-    };
+    owner: SimplifiedGitHubApiUserInterface;
 }

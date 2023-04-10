@@ -35,7 +35,7 @@ export const List = styled.ul`
     display: block;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(2px);
-    max-height: ${({ isActive }: ListPropsType) => (isActive ? '380px' : 0)};
+    max-height: 380px; //${({ isActive }: ListPropsType) => (isActive ? '380px' : 0)};
     overflow: hidden;
     overflow-y: scroll;
     transition: max-height 0.15s ease-out;

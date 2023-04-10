@@ -11,11 +11,17 @@ export default function GithubAutocomplete({
     label?: string;
     placeholder?: string;
 }): JSX.Element {
-    const { isLoading, isListActive, itemsToShow, total, hasError, error, setSearch } =
-        useGithubAutocomplete();
-    function handleInputChange(value: string): void {
-        setSearch(value.trim());
-    }
+    const {
+        isLoading,
+        isListActive,
+        itemsToShow,
+        total,
+        hasError,
+        error,
+        handleInputChange,
+        handleKeyboard,
+        selectedItem,
+    } = useGithubAutocomplete();
 
     return (
         <GithubAutocompleteWrapper>
@@ -24,11 +30,13 @@ export default function GithubAutocomplete({
                 label={label}
                 placeholder={placeholder}
                 onChange={handleInputChange}
+                onKey={handleKeyboard}
             />
             <GithubAutocompleteList
                 isActive={isListActive}
                 items={itemsToShow}
                 hasError={hasError}
+                selected={selectedItem}
             >
                 {hasError ? (
                     error
