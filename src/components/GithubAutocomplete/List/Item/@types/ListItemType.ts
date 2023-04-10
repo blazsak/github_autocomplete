@@ -1,4 +1,8 @@
 export declare type ListItemType = {
-    id: number;
+    id: string;
     name: string;
+    avatar: string;
+    description: string;
+    url: string;
+    type: string | 'repo' | 'user';
 };

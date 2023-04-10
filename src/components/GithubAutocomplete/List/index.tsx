@@ -1,7 +1,8 @@
 import React from 'react';
 import { GithubAutocompleteListItem } from './Item';
-import { type GithubAutocompleteListItemType } from '../@types/GithubAutocompleteListItemType';
+
 import { List, ListWrapper } from './List.style';
+import { type ListItemType } from './Item/@types/ListItemType';
 
 export function GithubAutocompleteList({
     items,
@@ -9,7 +10,7 @@ export function GithubAutocompleteList({
     children,
     hasError = false,
 }: {
-    items: GithubAutocompleteListItemType[];
+    items: ListItemType[];
     isActive: boolean;
     children?: React.ReactNode;
     hasError?: boolean;
@@ -17,7 +18,7 @@ export function GithubAutocompleteList({
     return (
         <ListWrapper isActive={isActive}>
             <List isActive={isActive}>
-                {items.map((item: GithubAutocompleteListItemType, index: number) => (
+                {items.map((item: ListItemType, index: number) => (
                     <GithubAutocompleteListItem
                         key={item.id}
                         item={item}

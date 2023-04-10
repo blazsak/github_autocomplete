@@ -27,6 +27,7 @@ export function GithubAutocompleteInput({
                     type="text"
                     placeholder={placeholder}
                     maxLength={50}
+                    tabIndex={1}
                     onInput={(event) => {
                         setCurrentValue(event.currentTarget.value);
                         onChange(event.currentTarget.value);
