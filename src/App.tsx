@@ -8,6 +8,11 @@ function App(): JSX.Element {
                 <GithubAutocomplete
                     label="Search GitHub repositories:"
                     placeholder="Type user or repository name"
+                    options={
+                        {
+                            /* optionaly customize options based on type GithubAutocompleteOptionsOptional */
+                        }
+                    }
                 />
             </div>
             <div className="px-3">

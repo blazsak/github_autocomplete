@@ -4,6 +4,11 @@ import {
     type GitHubApiRepositorySearchResponseInterface,
     type GitHubApiRepositorySearchUserInterface,
 } from './@interfaces/GitHubResponseInterfaces';
+import {
+    type GithubAutocompleteOptions,
+    type GithubAutocompleteOptionsOptional,
+} from './@types/GithubAutocompleteOptions';
+import { type GithubApiSearchOptions } from './@types/GithubApiSearchOptions';
 
 // TODO refactor to useCallback debounce function
 let fetchCallbackDebounceTimeout: NodeJS.Timeout;
@@ -20,8 +25,21 @@ declare type GithubAutocompleteHookType = {
     handleKeyboard: (key: string) => void;
     handleInputChange: (value: string) => void;
 };
-export function useGithubAutocomplete(): GithubAutocompleteHookType {
-    const { searchRepositories, searchUsers } = useGithubApiSearch();
+export function useGithubAutocomplete(
+    _options: GithubAutocompleteOptionsOptional = {},
+): GithubAutocompleteHookType {
+    const options: GithubAutocompleteOptions = {
+        ...{
+            // defaults
+            debounce: 750,
+            minSearchLength: 3,
+            maxResults: 50,
+        },
+        ..._options,
+    };
+    const { searchRepositories, searchUsers } = useGithubApiSearch({
+        maxResults: options.maxResults,
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [search, setSearch] = useState<string>('');
@@ -38,10 +56,13 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
                 // extra filter pass for matching current autocompleted result before async fetch finishes
                 // .filter((i) => i.name.search(search))
                 // return first 50 results
-                .slice(0, 50),
+                .slice(0, options.maxResults),
         [items],
     );
-    const isListActive = useMemo<boolean>(() => search.length >= 3, [search]);
+    const isListActive = useMemo<boolean>(
+        () => search.length >= options.minSearchLength,
+        [search],
+    );
     const hasError = useMemo<boolean>(() => error !== '', [error]);
 
     // handle keyboard
@@ -123,7 +144,7 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
             );
             setIsLoading(false);
             /**/
-        }, 1000);
+        }, options.debounce);
     }, [search]);
 
     function handleInputChange(value: string): void {
@@ -143,6 +164,7 @@ export function useGithubAutocomplete(): GithubAutocompleteHookType {
             setCursor(itemsToShow.length - 1);
         }
         if (key === 'Enter' && selectedItem !== undefined) {
+            // Todo move to options callback
             window?.open(selectedItem.url, '_blank');
         }
     }
@@ -167,7 +189,7 @@ declare type GitHubApiSearchType = {
     ) => Promise<GitHubApiRepositorySearchResponseInterface>;
 };
 
-export function useGithubApiSearch(): GitHubApiSearchType {
+export function useGithubApiSearch(options: GithubApiSearchOptions): GitHubApiSearchType {
     const apiUrl = 'https://api.github.com';
 
     async function handleResponse(response: Response): Promise<object> {
@@ -192,7 +214,7 @@ export function useGithubApiSearch(): GitHubApiSearchType {
         ): Promise<GitHubApiRepositorySearchResponseInterface> => {
             const encodedSearch = encodeURIComponent(search);
             return await fetch(
-                `${apiUrl}/search/repositories?q=${encodedSearch} in:public in:name&per_page=100&page=1`,
+                `${apiUrl}/search/repositories?q=${encodedSearch} in:public in:name&per_page=${options.maxResults}&page=1`,
                 { signal: abortController.signal },
             ).then(async (response) => {
                 return (await handleResponse(
@@ -208,7 +230,7 @@ export function useGithubApiSearch(): GitHubApiSearchType {
         ): Promise<GitHubApiRepositorySearchUserInterface> => {
             const encodedSearch = encodeURIComponent(search);
             return await fetch(
-                `${apiUrl}/search/users?q=${encodedSearch} in:login&per_page=100&page=1`,
+                `${apiUrl}/search/users?q=${encodedSearch} in:login&per_page=${options.maxResults}&page=1`,
                 { signal: abortController.signal },
             ).then(async (response) => {
                 return (await handleResponse(

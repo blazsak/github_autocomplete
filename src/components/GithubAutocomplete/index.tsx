@@ -3,13 +3,16 @@ import { GithubAutocompleteWrapper } from './GithubAutocomplete.styles';
 import { GithubAutocompleteInput } from './Input';
 import { GithubAutocompleteList } from './List';
 import { useGithubAutocomplete } from './utils';
+import { type GithubAutocompleteOptionsOptional } from './@types/GithubAutocompleteOptions';
 
 export default function GithubAutocomplete({
     label,
     placeholder,
+    options,
 }: {
     label?: string;
     placeholder?: string;
+    options?: GithubAutocompleteOptionsOptional;
 }): JSX.Element {
     const {
         isLoading,
@@ -21,7 +24,7 @@ export default function GithubAutocomplete({
         handleInputChange,
         handleKeyboard,
         selectedItem,
-    } = useGithubAutocomplete();
+    } = useGithubAutocomplete(options);
 
     return (
         <GithubAutocompleteWrapper>
