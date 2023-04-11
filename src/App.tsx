@@ -1,37 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '../../../../../vite.svg'
-import './App.css'
+import React from 'react';
+import GithubAutocomplete from './components/GithubAutocomplete';
 
-function App (): JSX.Element {
-    const [count, setCount] = useState(0)
-
+function App(): JSX.Element {
     return (
-        <div className="App">
-            <div>
-                <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-                    <img src={viteLogo} className="logo" alt="Vite logo"/>
-                </a>
-                <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-                    <img src={reactLogo} className="logo react" alt="React logo"/>
-                </a>
+        <main className="container mx-auto relative grid min-h-full bg-white  py-4 lg:px-8">
+            <div className="text-center">
+                <GithubAutocomplete
+                    label="Search GitHub repositories:"
+                    placeholder="Type user or repository name"
+                    options={
+                        {
+                            /* optionaly customize options based on type GithubAutocompleteOptionsOptional */
+                        }
+                    }
+                />
             </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => {
-                    setCount((count) => count + 1)
-                }}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
+            <div className="px-3">
+                {[...Array(3).keys()].map((i: number) => (
+                    <p key={i} className="mt-6 text-base leading-7 text-gray-600">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+                        tincidunt, nulla ut rutrum congue, velit ipsum elementum nibh, vel
+                        dapibus massa nulla ut nisl. Sed bibendum mi lectus, ut mattis
+                        elit hendrerit vitae. Cras non ante quis massa elementum feugiat
+                        molestie vitae nulla. Suspendisse id ornare mi. Vestibulum in
+                        mollis augue. Mauris commodo rhoncus ante, ac rhoncus eros
+                        suscipit vel. Nullam at feugiat nibh, placerat dictum lacus.
+                        Aenean ornare ex ante, quis cursus massa imperdiet vitae. Quisque
+                        vel posuere nunc. Quisque gravida felis in convallis sagittis.
+                        Pellentesque scelerisque nec lacus eu sagittis. Maecenas vehicula
+                        quis sapien sit amet hendrerit. Cras et elementum lorem. Duis
+                        mollis, urna vel dapibus placerat, leo odio finibus purus, et
+                        vulputate ipsum dui eu elit. Proin vulputate, metus non laoreet
+                        vehicula, mi tortor ultrices augue, vel ultricies magna erat vel
+                        est.
+                    </p>
+                ))}
             </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </div>
-    )
+
+            <footer className="text-center lg:text-right text-xs text-slate-400 py-4">
+                Konrad B. &copy; {new Date().getFullYear()}
+            </footer>
+        </main>
+    );
 }
 
-export default App
+export default App;
