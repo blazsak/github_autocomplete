@@ -13,6 +13,7 @@ global.fetch = jest.fn(() => {
 }) as jest.Mock;
 
 beforeEach(() => {
+    // @ts-expect-error mocking fetch
     fetch.mockClear();
 });
 
@@ -57,18 +58,20 @@ test('displays no records found', async () => {
 });
 
 test('displays API error', async () => {
-    fetch.mockImplementationOnce(() => Promise.reject('Throw error'));
+    // @ts-expect-error mocking fetch
+    fetch.mockImplementationOnce(() => Promise.reject(new Error('API error')));
 
     render(<GithubAutocomplete label="Test label error" />);
     const inputElement = screen.getByTestId('input');
     fireEvent.input(inputElement, { target: { value: 'test' } });
 
     await waitFor(() => {
-        expect(screen.getByText(/Error: Fetch from API failed/i)).toBeInTheDocument();
+        expect(screen.getByText(/API error/i)).toBeInTheDocument();
     });
 });
 
 test('displays API rate limit exceeded', async () => {
+    // @ts-expect-error mocking fetch
     fetch.mockImplementationOnce(() =>
         Promise.resolve({
             status: 403,
@@ -87,6 +90,7 @@ test('displays API rate limit exceeded', async () => {
 });
 
 test('displays API items list', async () => {
+    // @ts-expect-error mocking fetch
     fetch.mockImplementationOnce(() =>
         Promise.resolve({
             status: 200,
@@ -94,6 +98,7 @@ test('displays API items list', async () => {
             json: () => Promise.resolve({ total_count: 3, items: STUB_LIST_REPO }),
         }),
     );
+    // @ts-expect-error mocking fetch
     fetch.mockImplementationOnce(() =>
         Promise.resolve({
             status: 200,
