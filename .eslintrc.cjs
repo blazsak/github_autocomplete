@@ -25,6 +25,7 @@ module.exports = {
         indent: ['error', 4],
         '@typescript-eslint/indent': ['error', 4],
         '@typescript-eslint/consistent-type-definitions': 'off',
+        '@typescript-eslint/promise-function-async': 'off',
         'react/prop-types': 'off',
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     }

@@ -189,7 +189,9 @@ declare type GitHubApiSearchType = {
     ) => Promise<GitHubApiRepositorySearchResponseInterface>;
 };
 
-export function useGithubApiSearch(options: GithubApiSearchOptions): GitHubApiSearchType {
+export const useGithubApiSearch = (
+    options: GithubApiSearchOptions,
+): GitHubApiSearchType => {
     const apiUrl = 'https://api.github.com';
 
     async function handleResponse(response: Response): Promise<object> {
@@ -213,14 +215,12 @@ export function useGithubApiSearch(options: GithubApiSearchOptions): GitHubApiSe
             search: string,
         ): Promise<GitHubApiRepositorySearchResponseInterface> => {
             const encodedSearch = encodeURIComponent(search);
-            return await fetch(
-                `${apiUrl}/search/repositories?q=${encodedSearch} in:public in:name&per_page=${options.maxResults}&page=1`,
-                { signal: abortController.signal },
-            ).then(async (response) => {
-                return (await handleResponse(
-                    response,
-                )) as GitHubApiRepositorySearchResponseInterface;
-            });
+            return (await handleResponse(
+                await fetch(
+                    `${apiUrl}/search/repositories?q=${encodedSearch} in:public in:name&per_page=${options.maxResults}&page=1`,
+                    { signal: abortController.signal },
+                ),
+            )) as GitHubApiRepositorySearchResponseInterface;
         },
         /**
          * Search GitHub users
@@ -229,14 +229,12 @@ export function useGithubApiSearch(options: GithubApiSearchOptions): GitHubApiSe
             search: string,
         ): Promise<GitHubApiRepositorySearchUserInterface> => {
             const encodedSearch = encodeURIComponent(search);
-            return await fetch(
-                `${apiUrl}/search/users?q=${encodedSearch} in:login&per_page=${options.maxResults}&page=1`,
-                { signal: abortController.signal },
-            ).then(async (response) => {
-                return (await handleResponse(
-                    response,
-                )) as GitHubApiRepositorySearchUserInterface;
-            });
+            return (await handleResponse(
+                await fetch(
+                    `${apiUrl}/search/users?q=${encodedSearch} in:login&per_page=${options.maxResults}&page=1`,
+                    { signal: abortController.signal },
+                ),
+            )) as GitHubApiRepositorySearchUserInterface;
         },
     };
-}
+};

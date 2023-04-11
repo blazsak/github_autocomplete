@@ -27,7 +27,7 @@ export function GithubAutocompleteList({
         }
     }, [selected, listRef]);
     return (
-        <ListWrapper isActive={isActive}>
+        <ListWrapper isActive={isActive} data-testid="list">
             <List isActive={isActive} ref={listRef}>
                 {items.map((item: ListItemType, index: number) => (
                     <GithubAutocompleteListItem
@@ -39,7 +39,9 @@ export function GithubAutocompleteList({
                 ))}
             </List>
             {children !== undefined && isActive && (
-                <footer className={hasError ? 'error' : ''}>{children}</footer>
+                <footer data-testid="footer" className={hasError ? 'error' : ''}>
+                    {children}
+                </footer>
             )}
         </ListWrapper>
     );
