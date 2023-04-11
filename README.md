@@ -7,7 +7,7 @@ Your task is to create a reusable and self-contained autocomplete
 component, which can fetch matching users and repositories for
 a given string of characters.
 
-## Requirements
+### Requirements
 - Don’t use an existing autocomplete library (even if in real life this would be preferred).
 - Minimal chars number to initialize search: 3.
 - Result items are combined and displayed alphabetically using repository and profile name as ordering keys.
@@ -17,6 +17,9 @@ a given string of characters.
 - The solution should also display a meaningful snippet of your ability to test the code.
 
 Techstack: React, TypeScript.
+
+### Demo
+https://viia.studio/github_autocomplete
 
 ## Setup
 ```bash
