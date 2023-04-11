@@ -38,8 +38,9 @@ export function GithubAutocompleteInput({
                     onKeyUp={(event) => {
                         onKey(event.key);
                     }}
+                    data-testid="input"
                 />
-                <InputIcon right active={loading}>
+                <InputIcon right active={loading} data-testid="loader">
                     <IconSpinner />
                 </InputIcon>
                 <InputIcon right active={!loading && currentValue.length > 0}>
